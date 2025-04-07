@@ -1,0 +1,32 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+// Inicializar o cliente Supabase
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+export async function GET(request: NextRequest) {
+  try {
+    const { data, error } = await supabase
+      .from('locais')
+      .select('*')
+      .order('local_nome', { ascending: true });
+
+    if (error) {
+      console.error('Erro ao buscar locais:', error);
+      return NextResponse.json(
+        { error: 'Erro ao buscar dados de locais' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(data || []);
+  } catch (error) {
+    console.error('Erro na requisição de locais:', error);
+    return NextResponse.json(
+      { error: 'Erro interno no servidor' },
+      { status: 500 }
+    );
+  }
+} 

@@ -1,0 +1,315 @@
+erDiagram
+    %% Sistema e configurações
+    SISTEMA_ABA {
+        string api_endpoint
+        string credenciais
+        string frequencia_sincronizacao
+    }
+
+    %% Entidades principais
+    AGENDAMENTOS {
+        uuid id PK
+        string schedule_id
+        uuid schedule_pacient_id FK
+        uuid schedule_especialidade_id FK
+        uuid schedule_room_id FK
+        uuid schedule_local_id FK
+        text schedule_pagamento
+        uuid schedule_parent_id FK
+        uuid parent_id FK
+        timestamptz schedule_date_start
+        timestamptz schedule_date_end
+        enum schedule_status
+        bool importado
+        string id_origem
+    }
+
+    USUARIOS {
+        uuid id PK
+        uuid auth_user_id UK
+        string user_id
+        string nome
+        string user_name
+        string user_lastname
+        string email UK
+        enum tipo_usuario
+        boolean ativo
+        timestamptz ultimo_acesso
+        jsonb permissoes
+        varchar__15 crm
+        varchar__15 telefone
+        text foto
+    }
+
+    PROFISSOES {
+        uuid id PK
+        string profissao_id
+        string profissao_name
+        string profissao_status
+    }
+
+    ESPECIALIDADES {
+        uuid id PK
+        string especialidade_id
+        string nome
+        text anexo
+        enum status
+    }
+
+    PACIENTES {
+        uuid id PK
+        string nome
+        varchar__14 cpf
+        varchar__20 codigo_aba UK
+        date data_nascimento
+        uuid profissional_id FK
+        uuid supervisor_id FK
+        text telefone
+        text email
+    }
+
+    LOCAIS {
+        uuid id PK
+        string local_id
+        string local_nome
+    }
+
+    SALAS {
+        uuid id PK
+        string room_local_id
+        uuid local_id FK
+        string room_name
+    }
+
+    %% Entidades relacionadas a convênios e guias
+    PLANOS_SAUDE {
+        uuid id PK
+        string nome
+        string codigo_operadora UK
+        varchar__20 registro_ans
+        boolean ativo
+        jsonb dados_contrato
+    }
+
+    CARTEIRINHAS {
+        uuid id PK
+        uuid paciente_id FK
+        uuid plano_saude_id FK
+        string numero_carteirinha
+        date data_validade
+        enum status
+    }
+
+    PROCEDIMENTOS {
+        uuid id PK
+        string codigo UK
+        string nome
+        enum tipo
+        decimal valor
+        boolean ativo
+    }
+
+    GUIAS {
+        uuid id PK
+        uuid carteirinha_id FK
+        uuid paciente_id FK
+        uuid procedimento_id FK
+        string numero_guia
+        string numero_guia_operadora
+        string senha_autorizacao
+        date data_emissao
+        date data_validade
+        date data_autorizacao
+        date data_validade_senha
+        enum tipo
+        enum status
+        integer quantidade_autorizada
+        integer quantidade_executada
+        decimal valor_autorizado
+        string profissional_solicitante
+        string profissional_executante
+        string origem
+        string observacoes
+    }
+
+    %% Entidades de execução de atendimento
+    FICHAS {
+        uuid id PK
+        string codigo_ficha
+        uuid guia_id FK
+        string numero_guia
+        uuid agendamento_id FK
+        uuid storage_id FK
+        enum status
+        date data_atendimento
+    }
+
+    SESSOES {
+        uuid id PK
+        uuid ficha_id FK
+        uuid guia_id FK
+        date data_sessao
+        uuid procedimento_id FK
+        enum status
+        boolean possui_assinatura
+        string numero_guia
+        string codigo_ficha
+        string profissional_executante
+        string origem
+        string ip_origem
+        integer ordem_execucao
+        enum status_biometria
+    }
+
+    EXECUCOES {
+        uuid id PK
+        uuid guia_id FK
+        uuid sessao_id FK
+        date data_execucao
+        date data_atendimento
+        string paciente_nome
+        string paciente_carteirinha
+        string numero_guia
+        string codigo_ficha
+        boolean codigo_ficha_temp
+        uuid usuario_executante FK
+        string origem
+        string ip_origem
+        integer ordem_execucao
+        enum status_biometria
+        string conselho_profissional
+        string numero_conselho
+        string uf_conselho
+        string codigo_cbo
+        string profissional_executante
+    }
+
+    %% Entidades de gestão e controle
+    ATENDIMENTOS_FATURAMENTO {
+        uuid id PK
+        uuid id_atendimento FK
+        string carteirinha
+        string paciente_nome
+        date data_atendimento
+        time hora_inicial
+        uuid id_profissional FK
+        string profissional_nome
+        string status
+        string codigo_faturamento
+    }
+
+    DIVERGENCIAS {
+        uuid id PK
+        string numero_guia
+        enum tipo_divergencia
+        string descricao
+        string paciente_nome
+        string codigo_ficha
+        date data_execucao
+        date data_atendimento
+        string carteirinha
+        string prioridade
+        enum status
+        timestamptz data_identificacao
+        timestamptz data_resolucao
+        uuid resolvido_por FK
+        jsonb detalhes
+        uuid ficha_id FK
+        uuid execucao_id FK
+        uuid sessao_id FK
+        uuid paciente_id FK
+        integer tentativas_resolucao
+    }
+
+    AUDITORIA_EXECUCOES {
+        uuid id PK
+        timestamptz data_execucao
+        date data_inicial
+        date data_final
+        integer total_protocolos
+        integer total_divergencias
+        integer total_fichas
+        integer total_guias
+        integer total_execucoes
+        integer total_resolvidas
+        jsonb divergencias_por_tipo
+        jsonb metricas_adicionais
+        string status
+    }
+
+    STORAGE {
+        uuid id PK
+        string nome
+        string url
+        string tipo_referencia
+        integer size
+        string content_type
+    }
+
+    %% Tabelas de relacionamento
+    AGENDAMENTOS_PROFISSIONAIS {
+        uuid id PK
+        uuid schedule_id FK
+        uuid professional_id FK
+    }
+
+    USUARIOS_PROFISSOES {
+        uuid id PK
+        uuid usuario_id FK
+        uuid profissao_id FK
+    }
+
+    USUARIOS_ESPECIALIDADES {
+        uuid id PK
+        uuid usuario_id FK
+        uuid especialidade_id FK
+        boolean principal
+        string substituido
+    }
+
+    SISTEMA_ABA ||--o{ AGENDAMENTOS : "sincroniza"
+    
+    AGENDAMENTOS }o--|| PACIENTES : "tem"
+    AGENDAMENTOS }o--|| PROCEDIMENTOS : "realiza"
+    AGENDAMENTOS }o--o{ SESSOES : "agenda"
+    AGENDAMENTOS }o--o{ EXECUCOES : "registra"
+    AGENDAMENTOS }o--|| SALAS : "ocorre_em"
+    AGENDAMENTOS }o--|| ESPECIALIDADES : "relaciona_a"
+    AGENDAMENTOS }o--|| LOCAIS : "ocorre_em"
+    
+    AGENDAMENTOS ||--o{ AGENDAMENTOS_PROFISSIONAIS : "possui"
+    AGENDAMENTOS_PROFISSIONAIS }o--|| USUARIOS : "associa"
+    
+    USUARIOS ||--o{ USUARIOS_PROFISSOES : "tem"
+    USUARIOS ||--o{ USUARIOS_ESPECIALIDADES : "tem"
+    PROFISSOES }o--o{ USUARIOS_PROFISSOES : "associada_a"
+    ESPECIALIDADES }o--o{ USUARIOS_ESPECIALIDADES : "associada_a"
+    
+    LOCAIS ||--o{ SALAS : "contém"
+    
+    PACIENTES ||--o{ CARTEIRINHAS : "possui"
+    
+    CARTEIRINHAS ||--o{ GUIAS : "autoriza"
+    PACIENTES ||--o{ GUIAS : "recebe"
+    PROCEDIMENTOS ||--o{ GUIAS : "autoriza"
+    
+    GUIAS ||--o{ FICHAS : "gera"
+    FICHAS ||--o{ SESSOES : "contém"
+    GUIAS ||--o{ SESSOES : "autoriza"
+    PROCEDIMENTOS ||--o{ SESSOES : "realizado_em"
+    
+    GUIAS ||--o{ EXECUCOES : "registra"
+    SESSOES ||--|| EXECUCOES : "executa"
+    
+    USUARIOS ||--o{ PACIENTES : "supervisiona"
+    PLANOS_SAUDE ||--o{ CARTEIRINHAS : "emite"
+    
+    AGENDAMENTOS ||--o{ ATENDIMENTOS_FATURAMENTO : "gera"
+    USUARIOS ||--o{ ATENDIMENTOS_FATURAMENTO : "executa"
+    
+    STORAGE ||--o{ FICHAS : "armazena"
+    
+    SESSOES ||--o{ DIVERGENCIAS : "gera"
+    EXECUCOES ||--o{ DIVERGENCIAS : "gera"
+    FICHAS ||--o{ DIVERGENCIAS : "relaciona"
+    PACIENTES ||--o{ DIVERGENCIAS : "associa"

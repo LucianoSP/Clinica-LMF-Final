@@ -1,0 +1,16 @@
+@echo off
+echo Encerrando processos Node.js existentes...
+taskkill /F /IM node.exe /T
+
+echo Limpando cache do Next.js...
+cd frontend
+if exist .next rmdir /S /Q .next
+
+echo Reinstalando dependências...
+npm install
+
+echo Construindo o projeto...
+npm run build
+
+echo Iniciando o servidor...
+npm run dev 

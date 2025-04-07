@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Diretrizes para Desenvolvimento de Código
+globs: 
+alwaysApply: true
+---
+
+Prefira sempre soluções simples – Evite duplicação de código sempre que possível, verificando outras áreas da base de código que possam já conter funcionalidades semelhantes.
+
+Escreva código levando em conta os diferentes ambientes – Desenvolvimento, teste e produção. Seja cuidadoso para fazer apenas as mudanças solicitadas ou aquelas que você tem certeza de que são bem compreendidas e estão relacionadas à alteração solicitada.
+
+Correção de bugs e problemas – Ao corrigir um problema, não introduza novos padrões ou tecnologias sem antes esgotar todas as opções da implementação existente. Se for realmente necessário mudar, certifique-se de remover a implementação antiga para evitar lógica duplicada e informe ao usuário para que ele aprove.
+
+Mantenha a base de código limpa e organizada – Evite escrever scripts diretamente nos arquivos, especialmente se o script for executado apenas uma vez.
+
+Evite arquivos muito grandes – Sempre que um arquivo ultrapassar 400-500 linhas de código, considere refatorá-lo, mas apenas se fizer sentido.
+
+A sua tarefa é escrever todo o código nessa aplicação, nào peça para que eu faça ... perde tempo e recursos... lembre -se disso sempre!
+Nunca sobrescreva o arquivo .env sem primeiro perguntar e confirmar

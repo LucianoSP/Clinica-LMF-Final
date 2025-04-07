@@ -1,0 +1,19 @@
+Proposta de prestação de serviços em desenvolvimento de software e implantação no cliente.
+O cenario é o seguinte:
+O nome do software é "Clinica LMF" desenvolvido com python no backend e nextjs no frontend.
+Utilizará os serviços externos: Supabase (banco de dados e autenticação de usuarios), Cloudflare R2 para armazenar documentos, Vercel para hospedar o frontend, Replit para hospedar o backend.
+Uma parte do software está pronta e testada com dados gerados especificamente para testes.
+Vamos chamar esta parte de Pacote 1.
+O serviços do pacote 1 serão:
+1-testar todas as funcionalidades com dados reais e volumosos, para encontrar possíveis bugs, problemas de performance.
+2-corrigir esses problemas sem contudo adicionar novas funcionalidades.
+
+Outra parte do software, o Pacote 2, se refere a novas funcionalidades.
+As funcionalidades identificadas no momento são:
+1) Funcionalidade para gerenciar usuarios (CRUD) que serão cadastrados como users no Supabase para efeito de autenticação.
+2) Funcionalidades para criar e manter as entidades: Menu, Usuario, Perfil, Autorizacao (Permissão) no software, com objetivo de limitar o acesso dos usuários às funcionalidades do sistema.
+ 
+O cliente deseja contratar estes serviços por hora trabalhada do profissional por "pacote de horas fechado" e com prazo estipulado. Isso requer que o escopo também seja fechado.
+Outra opção seria também por horas trabalhadas, porem com "escopo aberto", com possibilidade de utizar horas trabalhadas de acordo com a necessidade.
+
+Crie uma proposta contendo estas duas opções de contratação para os Pacotes 1 e 2, salvando no arquivo proposta1.md

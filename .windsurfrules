@@ -1,0 +1,281 @@
+## 1. Visão Geral do Projeto
+
+```
+clinicalmf-producao/
+├── frontend/           # Aplicação Next.js
+├── backend/           # API FastAPI
+├── docs/             # Documentação geral
+├── instrucoes/       # Guias e instruções
+├── scripts/          # Scripts utilitários
+├── sql/             # Scripts SQL
+└── templates/        # Templates e modelos
+```
+
+## 2. Frontend (Next.js)
+
+```
+frontend/
+├── src/
+│   ├── app/          # Páginas e rotas
+│   ├── components/   # Componentes React
+│   ├── hooks/        # Hooks customizados
+│   ├── lib/          # Utilitários e configurações
+│   ├── services/     # Serviços de API
+│   └── types/        # Tipos TypeScript
+├── public/           # Arquivos estáticos
+├── .env.local        # Variáveis de ambiente
+├── next.config.js    # Configuração Next.js
+├── package.json      # Dependências
+└── tailwind.config.ts # Configuração Tailwind
+```
+
+### 2.1 Principais Componentes
+
+- `components/ui/`: Componentes de UI reutilizáveis
+- `components/forms/`: Formulários e inputs
+- `components/layout/`: Componentes de layout
+- `components/[entidade]/`: Componentes específicos por entidade
+
+### 2.2 Configurações
+
+- `lib/supabase.ts`: Cliente Supabase
+- `lib/api.ts`: Cliente Axios
+- `lib/utils.ts`: Funções utilitárias
+
+## 3. Backend (FastAPI)
+
+```
+backend/
+├── routes/           # Rotas da API
+├── models/           # Modelos Pydantic
+├── services/         # Lógica de negócio
+├── repositories/     # Acesso a dados
+├── schemas/          # Esquemas SQL
+├── utils/           # Utilitários
+└── config.py        # Configurações
+```
+
+### 3.1 Principais Módulos
+
+- `routes/`: Endpoints da API
+- `models/`: Definições de modelos de dados
+- `services/`: Regras de negócio
+- `repositories/`: Acesso ao Supabase
+
+### 3.2 Arquivos Principais
+
+- `app.py`: Aplicação FastAPI
+- `database_supabase.py`: Cliente Supabase
+- `storage_r2.py`: Armazenamento de arquivos
+
+## 4. Documentação
+
+```
+docs/
+├── visao_geral.md           # Visão geral do sistema
+└── scripts-sql.md           # Documentação SQL
+
+instrucoes/
+├── instrucoes_backend.md    # Guia do backend
+├── instrucoes_frontend.md   # Guia do frontend
+├── instrucoes_utils.md      # Guia de utilitários
+├── instrucoes_testes.md     # Guia de testes
+└── instrucoes_deploy.md     # Guia de deploy
+```
+
+## 5. Scripts e SQL
+
+### 5.1 Scripts
+
+```
+scripts/
+├── gerar_dados_teste.py    # Geração de dados
+└── popular_dados.py        # População inicial (legado)
+```
+
+### 5.2 SQL
+
+```
+sql/
+├── 01_criar_tabelas.sql    # Criação de tabelas
+├── 02_desabilitar_seguranca.sql  # Desabilitar RLS
+└── 03_configurar_seguranca.sql   # Configurar RLS
+```
+
+## 6. Boas Práticas
+
+1. **Organização**
+
+   - Manter arquivos relacionados juntos
+   - Seguir convenções de nomenclatura
+   - Documentar estruturas novas
+2. **Modularização**
+
+   - Separar responsabilidades
+   - Evitar duplicação de código
+   - Manter componentes coesos
+3. **Manutenção**
+
+   - Atualizar documentação
+   - Remover código obsoleto
+   - Manter dependências atualizadas
+4. **Versionamento**
+
+   - Seguir padrão de commits
+   - Manter branches organizados
+   - Documentar mudanças estruturais
+
+
+# Documentação das Tabelas do Sistema
+
+## Diagrama de Relacionamentos
+
+```mermaid
+erDiagram
+    USUARIOS {
+        uuid id PK
+        uuid auth_user_id UK
+        text nome
+        text email UK
+        enum tipo_usuario
+        boolean ativo
+        timestamptz ultimo_acesso
+        jsonb permissoes
+        varchar(15) crm
+    }
+    ESPECIALIDADES {
+        uuid id PK
+        text nome
+        text anexo
+        enum status
+    }
+    PLANOS_SAUDE {
+        uuid id PK
+        varchar(20) codigo_operadora UK
+        varchar(20) registro_ans
+        varchar(255) nome
+        boolean ativo
+        jsonb dados_contrato
+    }
+    PACIENTES {
+        uuid id PK
+        text nome
+        varchar(14) cpf
+        date data_nascimento
+        uuid profissional_id FK
+        uuid supervisor_id FK
+    }
+    USUARIOS_ESPECIALIDADES {
+        uuid id PK
+        uuid usuario_id FK
+        uuid especialidade_id FK
+        boolean principal
+    }
+    CARTEIRINHAS {
+        uuid id PK
+        uuid paciente_id FK
+        uuid plano_saude_id FK
+        text numero_carteirinha
+        date data_validade
+        enum status
+    }
+    PROCEDIMENTOS {
+        uuid id PK
+        varchar(20) codigo UK
+        text nome
+        enum tipo
+        decimal valor
+        boolean ativo
+    }
+    GUIAS {
+        uuid id PK
+        uuid carteirinha_id FK
+        uuid paciente_id FK
+        uuid procedimento_id FK
+        text numero_guia
+        date data_solicitacao
+        enum status
+    }
+    FICHAS {
+        uuid id PK
+        text codigo_ficha
+        uuid guia_id FK
+        text numero_guia
+        uuid storage_id FK
+        enum status
+        date data_atendimento
+    }
+    SESSOES {
+        uuid id PK
+        uuid ficha_id FK
+        uuid guia_id FK
+        date data_sessao
+        boolean possui_assinatura
+        enum status
+    }
+    EXECUCOES {
+        uuid id PK
+        uuid guia_id FK
+        uuid sessao_id FK
+        date data_execucao
+        text numero_guia
+        text codigo_ficha
+        enum status_biometria
+    }
+    STORAGE {
+        uuid id PK
+        text nome
+        text url
+        text tipo_referencia
+    }
+    DIVERGENCIAS {
+        uuid id PK
+        text numero_guia
+        enum tipo
+        enum status
+        uuid ficha_id FK
+        uuid execucao_id FK
+        uuid sessao_id FK
+    }
+    AUDITORIA_EXECUCOES {
+        uuid id PK
+        timestamptz data_execucao
+        date data_inicial
+        date data_final
+        jsonb divergencias_por_tipo
+    }
+
+    USUARIOS ||--o{ USUARIOS_ESPECIALIDADES : possui
+    USUARIOS ||--o{ PACIENTES : supervisiona
+    ESPECIALIDADES ||--o{ USUARIOS_ESPECIALIDADES : tem
+    PLANOS_SAUDE ||--o{ CARTEIRINHAS : possui
+    PACIENTES ||--o{ CARTEIRINHAS : tem
+    CARTEIRINHAS ||--o{ GUIAS : gera
+    PROCEDIMENTOS ||--o{ GUIAS : autoriza
+    GUIAS ||--o{ FICHAS : possui
+    FICHAS ||--o{ SESSOES : contem
+    SESSOES ||--o{ EXECUCOES : registra
+    STORAGE ||--o{ FICHAS : armazena
+    DIVERGENCIAS ||--o{ EXECUCOES : identifica
+    DIVERGENCIAS ||--o{ FICHAS : relaciona
+    DIVERGENCIAS ||--o{ SESSOES : verifica
+    AUDITORIA_EXECUCOES ||--o{ EXECUCOES : audita
+```
+
+## Hierarquia de Entidades
+
+```mermaid
+graph TD
+    A[Plano de Saúde] --> B[Carteirinhas]
+    B --> C[Guias]
+    C --> D[Fichas de Presença]
+    D --> E[Sessões]
+    E --> F[Execuções]
+    F --> G[Divergências]
+    G --> H[Auditoria de Execuções]
+```
+
+backend/scripts/
+├── gerar_dados_antigo.py   # Versão original mantida para referência
+├── gerar_dados_teste.py    # Versão atualizada com a nova estrutura
+└── gerar_dados_de_testes.py # Versão mais completa com dados adicionais

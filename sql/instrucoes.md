@@ -1,0 +1,6 @@
+Observações Importantes no SQL:
+
+Tabela especialidades: Eu notei que já existe uma tabela especialidades no seu schema original (linha 315 do 01_criar_tabelas.sql). Portanto, não criei uma nova. A tabela de junção usuarios_aba_especialidades fará a ligação entre os usuarios_aba e essa tabela especialidades existente. Certifique-se de que a tabela especialidades existente contenha as especialidades necessárias ou importe-as para lá.
+Tabela usuarios_especialidades: Da mesma forma, já existe uma usuarios_especialidades (linha 460) ligando usuarios (a tabela principal de usuários do seu sistema) e especialidades. Para evitar conflitos e manter a lógica separada, criei uma nova tabela de junção chamada usuarios_aba_especialidades para ligar especificamente usuarios_aba e especialidades.
+Constraints UNIQUE em salas: Deixei comentadas as constraints UNIQUE (local_id, nome) e UNIQUE (local_id, id_origem_sala). Descomente a que fizer sentido para garantir a unicidade das salas dentro de um local.
+Modificação agendamentos: Usei ALTER TABLE para modificar as chaves estrangeiras (schedule_profissional_id, schedule_local_id, schedule_room_id) e remover a coluna schedule_especialidade_id.

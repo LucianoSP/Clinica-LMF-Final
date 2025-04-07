@@ -1,0 +1,147 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Diretrizes para Desenvolvimento de Código
+globs: 
+alwaysApply: true
+---
+# Relatório Executivo: Sistema Gestão de Faturamento
+
+## 1. Visão Geral do Projeto
+
+O projeto é um sistema completo para gestão de clínicas de atendimento a crianças autistas, desenvolvido com uma arquitetura moderna que utiliza:
+
+- **Backend**: FastAPI (Python)
+- **Frontend**: Next.js 14/React
+- **Armazenamento de Arquivos**: Cloudflare R2
+- **Extração de Dados**: IA para processamento de documentos (Claude)
+- **Automação**: Selenium para integração com sistemas externos
+- **Banco de Dados**: Supabase (PostgreSQL)
+- **Armazenamento de Arquivos**: Cloudflare R2
+- **Cache Local**: Arquivos JSON para otimização
+
+## 2. Funcionalidades Implementadas
+
+### 2.1. Gestão de Pacientes e Atendimentos
+- ✅ Cadastro completo de pacientes
+- ✅ Gestão de carteirinhas
+- ✅ Controle de protocolos de atendimento
+- ✅ Gerenciamento de guias
+- ✅ Registro e controle de fichas de presença
+- ✅ Registro de sessões e execuções
+- ✅ Atendimentos para faturamento
+
+### 2.2. Sistema de Upload e Extração de Dados de PDF
+- ✅ Upload de documentos PDF (fichas de pacientes)
+- ✅ Extração automatizada de dados com IA (API Claude da Anthropic)
+- ✅ Dois modos de funcionamento:
+  - **Modo Normal**: Para guias existentes no sistema
+  - **Modo Alternativo**: Permite upload mesmo sem guia cadastrada
+- ✅ Armazenamento dos PDFs no Cloudflare R2
+- ✅ Registro dos dados extraídos no Supabase
+
+### 2.3. Tratamento de Fichas Pendentes
+- ✅ Interface para visualizar fichas pendentes
+- ✅ Filtros e busca avançada
+- ✅ Visualização do PDF original e dados extraídos
+- ✅ Processamento manual com opções para criar guia ou vincular a existente
+- ✅ Feedback visual sobre o resultado do processamento
+
+### 2.4. Sistema de Armazenamento e Sincronização
+- ✅ Gerenciamento de arquivos digitais (PDFs, imagens, documentos)
+- ✅ Armazenamento no Cloudflare R2 com metadados no Supabase
+- ✅ Sincronização bidirecional entre R2 e tabela de storage
+- ✅ Interface para visualização de todos os arquivos armazenados
+- ✅ Funcionalidades de upload e exclusão de arquivos
+
+### 2.5. Sistema de Scraping Unimed
+- ✅ Automação para captura de dados da Unimed
+- ✅ Autenticação automática no site da Unimed
+- ✅ Captura de sessões realizadas com filtro por data
+- ✅ Processamento de dados capturados
+- ✅ Persistência no banco de dados local
+- ✅ Dashboard de monitoramento
+- ✅ Controle de cache para otimização
+
+### 2.6. Importação de Dados
+- ✅ Importação de pacientes do MySQL
+- ✅ Mapeamento de IDs entre MySQL e Supabase
+- ✅ Importação de agendamentos
+- ✅ Logs detalhados de importação
+
+### 2.7. Scripts de Teste
+- ✅ Scripts para geração de dados de teste
+- ✅ Testes de conexão com serviços externos
+- ✅ Ambiente de desenvolvimento isolado
+
+## 3. Funcionalidades em Desenvolvimento
+
+### 3.1. Sistema de Auditoria de Divergências
+- 🟡 Implementação parcial do sistema para identificar e gerenciar discrepâncias entre fichas físicas e execuções registradas
+- 🟡 Interface para visualização e correção de divergências
+
+### 3.2. Processamento em Lote de Fichas Pendentes
+- 🟡 Seleção múltipla de fichas para processamento em lote
+- 🟡 Automação do processamento para fichas que atendem a critérios específicos
+
+## 4. Funcionalidades Pendentes
+
+### 4.1. Auditoria e Relatórios Avançados
+- ⭕ Relatórios detalhados sobre produtividade
+- ⭕ Auditoria completa de ações dos usuários
+- ⭕ Estatísticas avançadas de atendimento
+
+### 4.2. Notificações e Alertas
+- ⭕ Sistema de notificações para usuários
+- ⭕ Alertas sobre fichas pendentes que precisam de atenção
+- ⭕ Notificações de processos automatizados concluídos
+
+### 4.3. Melhorias de Usabilidade
+- ⭕ Refinamento da interface de usuário
+- ⭕ Otimização para dispositivos móveis
+- ⭕ Tutoriais interativos para novos usuários
+
+## 5. Arquitetura e Estrutura de Dados
+
+### 5.1. Principais Entidades
+- **PACIENTES**: Cadastro completo de pacientes
+- **CARTEIRINHAS**: Documentos de identificação dos pacientes
+- **PROTOCOLOS**: Protocolos de atendimento
+- **GUIAS**: Guias de autorização para procedimentos
+- **PROCEDIMENTOS**: Procedimentos médicos
+- **FICHAS**: Fichas de presença
+- **SESSOES**: Registros de sessões realizadas
+- **EXECUCOES**: Detalhes de execução de procedimentos
+- **ATENDIMENTOS_FATURAMENTO**: Dados para faturamento
+
+## 8. Próximos Passos Recomendados
+
+1. **Finalização do Sistema de Auditoria de Divergências**
+   - Implementação completa do módulo de auditoria
+   - Testes com dados reais da clínica
+
+2. **Implementação do Processamento em Lote**
+   - Automação para processamento de múltiplas fichas
+   - Regras de negócio para processamento automático
+
+3. **Desenvolvimento de Relatórios Avançados**
+   - Relatórios gerenciais
+   - Estatísticas de produtividade
+   - Indicadores de desempenho
+
+4. **Sistema de Notificações**
+   - Alertas para usuários
+   - Notificações de processos concluídos
+   - Lembretes de tarefas pendentes
+
+5. **Refinamento da Interface**
+   - Melhorias de usabilidade
+   - Otimização para dispositivos móveis
+   - Personalização da experiência do usuário
+
+---
+
+
